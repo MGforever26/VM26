@@ -1,0 +1,54 @@
+name: Patch index wording
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-index.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Patch index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          old_eyebrow = '<div class="eyebrow">Mobilguide</div>'
+          new_eyebrow = '<div class="eyebrow">Mobilguide · GitHub Pages</div>'
+          if old_eyebrow in text:
+              text = text.replace(old_eyebrow, new_eyebrow, 1)
+          elif new_eyebrow not in text:
+              raise SystemExit('Kunne ikke finde Mobilguide toptekst')
+
+          old_note = 'Mobilguiden er én samlet index.html med indlejret data, så Netlify kun behøver én fil.'
+          new_note = 'Mobilguiden er én samlet index.html med indlejret data og hostes direkte via GitHub Pages.'
+          if old_note in text:
+              text = text.replace(old_note, new_note, 1)
+          elif new_note not in text:
+              raise SystemExit('Kunne ikke finde Netlify noten')
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Ingen ændringer at committe"
+            exit 0
+          fi
+          git add index.html
+          git commit -m "Update GitHub Pages wording"
+          git push
