@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-06-19T00:45:00+02:00",
+  "sourceNotes": [
+    "Målscorerdata er lagt i separat fil, så kampkort og topscorerfane kan vise konkrete navne uden at ændre grunddatafilen.",
+    "Match 1 bygger på Reuters, AP, Guardian og FourFourTwo omtale af Mexico - Sydafrika.",
+    "Match 2 bygger på FourFourTwo dag-1-opsummering.",
+    "Match 4 bygger på Guardian, Houston Chronicle og TalkSport omtale af USA - Paraguay. Tidlige/ukendte minutangivelser er bevidst udeladt frem for at gætte."
+  ],
+  "matches": [
+    {
+      "matchNumber": 1,
+      "goals": [
+        { "team": "Mexico", "player": "Julián Quiñones", "minute": "" },
+        { "team": "Mexico", "player": "Raúl Jiménez", "minute": "67'" }
+      ]
+    },
+    {
+      "matchNumber": 2,
+      "goals": [
+        { "team": "Tjekkiet", "player": "Ladislav Krejčí", "minute": "" },
+        { "team": "Sydkorea", "player": "Hwang In-beom", "minute": "" },
+        { "team": "Sydkorea", "player": "Oh Hyeon-gyu", "minute": "" }
+      ]
+    },
+    {
+      "matchNumber": 4,
+      "goals": [
+        { "team": "USA", "player": "Selvmål", "minute": "", "ownGoal": true, "note": "Paraguay" },
+        { "team": "USA", "player": "Folarin Balogun", "minute": "" },
+        { "team": "Paraguay", "player": "Maurício", "minute": "" },
+        { "team": "USA", "player": "Folarin Balogun", "minute": "" },
+        { "team": "USA", "player": "Gio Reyna", "minute": "90+'" }
+      ]
+    }
+  ]
+}
