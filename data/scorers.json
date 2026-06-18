@@ -1,35 +1,565 @@
 {
-  "generatedAt": "2026-06-19T00:45:00+02:00",
+  "generatedAt": "2026-06-19T01:05:00+02:00",
+  "completeThroughMatchNumber": 26,
   "sourceNotes": [
     "Målscorerdata er lagt i separat fil, så kampkort og topscorerfane kan vise konkrete navne uden at ændre grunddatafilen.",
-    "Match 1 bygger på Reuters, AP, Guardian og FourFourTwo omtale af Mexico - Sydafrika.",
-    "Match 2 bygger på FourFourTwo dag-1-opsummering.",
-    "Match 4 bygger på Guardian, Houston Chronicle og TalkSport omtale af USA - Paraguay. Tidlige/ukendte minutangivelser er bevidst udeladt frem for at gætte."
+    "Datasættet dækker alle færdigspillede kampe til og med Schweiz - Bosnien-Hercegovina.",
+    "Minuttal er kun udfyldt, hvor de er fremgået tydeligt af verificerede kilder. Manglende minutter betyder ikke manglende målscorer, men at minuttet ikke er verificeret i de anvendte kilder.",
+    "Selvmål vises på kampkort, men tæller ikke med i topscorerlisten."
   ],
   "matches": [
     {
       "matchNumber": 1,
       "goals": [
-        { "team": "Mexico", "player": "Julián Quiñones", "minute": "" },
-        { "team": "Mexico", "player": "Raúl Jiménez", "minute": "67'" }
+        {
+          "team": "Mexico",
+          "player": "Julián Quiñones",
+          "minute": "9'"
+        },
+        {
+          "team": "Mexico",
+          "player": "Raúl Jiménez",
+          "minute": "67'"
+        }
       ]
     },
     {
       "matchNumber": 2,
       "goals": [
-        { "team": "Tjekkiet", "player": "Ladislav Krejčí", "minute": "" },
-        { "team": "Sydkorea", "player": "Hwang In-beom", "minute": "" },
-        { "team": "Sydkorea", "player": "Oh Hyeon-gyu", "minute": "" }
+        {
+          "team": "Tjekkiet",
+          "player": "Ladislav Krejčí",
+          "minute": ""
+        },
+        {
+          "team": "Sydkorea",
+          "player": "Hwang In-beom",
+          "minute": ""
+        },
+        {
+          "team": "Sydkorea",
+          "player": "Oh Hyeon-gyu",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 3,
+      "goals": [
+        {
+          "team": "Bosnien-Hercegovina",
+          "player": "Jovo Lukić",
+          "minute": "21'"
+        },
+        {
+          "team": "Canada",
+          "player": "Cyle Larin",
+          "minute": "78'"
+        }
       ]
     },
     {
       "matchNumber": 4,
       "goals": [
-        { "team": "USA", "player": "Selvmål", "minute": "", "ownGoal": true, "note": "Paraguay" },
-        { "team": "USA", "player": "Folarin Balogun", "minute": "" },
-        { "team": "Paraguay", "player": "Maurício", "minute": "" },
-        { "team": "USA", "player": "Folarin Balogun", "minute": "" },
-        { "team": "USA", "player": "Gio Reyna", "minute": "90+'" }
+        {
+          "team": "USA",
+          "player": "Selvmål",
+          "minute": "",
+          "ownGoal": true,
+          "note": "Paraguay"
+        },
+        {
+          "team": "USA",
+          "player": "Folarin Balogun",
+          "minute": ""
+        },
+        {
+          "team": "Paraguay",
+          "player": "Maurício",
+          "minute": ""
+        },
+        {
+          "team": "USA",
+          "player": "Folarin Balogun",
+          "minute": ""
+        },
+        {
+          "team": "USA",
+          "player": "Gio Reyna",
+          "minute": "90+'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 5,
+      "goals": [
+        {
+          "team": "Skotland",
+          "player": "John McGinn",
+          "minute": "28'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 6,
+      "goals": [
+        {
+          "team": "Australien",
+          "player": "Nestory Irankunda",
+          "minute": ""
+        },
+        {
+          "team": "Australien",
+          "player": "Connor Metcalfe",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 7,
+      "goals": [
+        {
+          "team": "Marokko",
+          "player": "Ismael Saibari",
+          "minute": ""
+        },
+        {
+          "team": "Brasilien",
+          "player": "Vinícius Jr.",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 8,
+      "goals": [
+        {
+          "team": "Schweiz",
+          "player": "Breel Embolo",
+          "minute": "17'"
+        },
+        {
+          "team": "Qatar",
+          "player": "Miro Muheim",
+          "minute": "90+4'",
+          "ownGoal": true,
+          "note": "efter Khoukhi-header"
+        }
+      ]
+    },
+    {
+      "matchNumber": 9,
+      "goals": [
+        {
+          "team": "Elfenbenskysten",
+          "player": "Amad Diallo",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 10,
+      "goals": [
+        {
+          "team": "Tyskland",
+          "player": "Felix Nmecha",
+          "minute": "6'"
+        },
+        {
+          "team": "Curacao",
+          "player": "Livano Comenencia",
+          "minute": "21'"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Nico Schlotterbeck",
+          "minute": "38'"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Kai Havertz",
+          "minute": "45+4'",
+          "note": "straffe"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Jamal Musiala",
+          "minute": "47'"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Nathaniel Brown",
+          "minute": "68'"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Deniz Undav",
+          "minute": "78'"
+        },
+        {
+          "team": "Tyskland",
+          "player": "Kai Havertz",
+          "minute": "88'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 11,
+      "goals": [
+        {
+          "team": "Holland",
+          "player": "Virgil van Dijk",
+          "minute": "50'"
+        },
+        {
+          "team": "Japan",
+          "player": "Keito Nakamura",
+          "minute": "57'"
+        },
+        {
+          "team": "Holland",
+          "player": "Crysencio Summerville",
+          "minute": "64'"
+        },
+        {
+          "team": "Japan",
+          "player": "Daichi Kamada",
+          "minute": "88'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 12,
+      "goals": [
+        {
+          "team": "Sverige",
+          "player": "Yasin Ayari",
+          "minute": ""
+        },
+        {
+          "team": "Sverige",
+          "player": "Alexander Isak",
+          "minute": ""
+        },
+        {
+          "team": "Tunesien",
+          "player": "Omar Rekik",
+          "minute": ""
+        },
+        {
+          "team": "Sverige",
+          "player": "Viktor Gyökeres",
+          "minute": ""
+        },
+        {
+          "team": "Sverige",
+          "player": "Yasin Ayari",
+          "minute": ""
+        },
+        {
+          "team": "Sverige",
+          "player": "Mattias Svanberg",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 13,
+      "goals": [
+        {
+          "team": "Saudi-Arabien",
+          "player": "Abdulelah Al-Amri",
+          "minute": ""
+        },
+        {
+          "team": "Uruguay",
+          "player": "Maxi Araújo",
+          "minute": "80'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 14,
+      "goals": []
+    },
+    {
+      "matchNumber": 15,
+      "goals": [
+        {
+          "team": "New Zealand",
+          "player": "Elijah Just",
+          "minute": ""
+        },
+        {
+          "team": "Iran",
+          "player": "Ramin Rezaeian",
+          "minute": "32'"
+        },
+        {
+          "team": "New Zealand",
+          "player": "Elijah Just",
+          "minute": ""
+        },
+        {
+          "team": "Iran",
+          "player": "Mohammad Mohebi",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 16,
+      "goals": [
+        {
+          "team": "Egypten",
+          "player": "Emam Ashour",
+          "minute": "19'"
+        },
+        {
+          "team": "Belgien",
+          "player": "Mohamed Hany",
+          "minute": "66'",
+          "ownGoal": true,
+          "note": "selvmål"
+        }
+      ]
+    },
+    {
+      "matchNumber": 17,
+      "goals": [
+        {
+          "team": "Frankrig",
+          "player": "Kylian Mbappé",
+          "minute": ""
+        },
+        {
+          "team": "Senegal",
+          "player": "Ibrahim Mbaye",
+          "minute": ""
+        },
+        {
+          "team": "Frankrig",
+          "player": "Bradley Barcola",
+          "minute": ""
+        },
+        {
+          "team": "Frankrig",
+          "player": "Kylian Mbappé",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 18,
+      "goals": [
+        {
+          "team": "Norge",
+          "player": "Erling Haaland",
+          "minute": ""
+        },
+        {
+          "team": "Irak",
+          "player": "Aymen Hussein",
+          "minute": "39'"
+        },
+        {
+          "team": "Norge",
+          "player": "Erling Haaland",
+          "minute": ""
+        },
+        {
+          "team": "Norge",
+          "player": "Leo Østigård",
+          "minute": "75'"
+        },
+        {
+          "team": "Norge",
+          "player": "Aymen Hussein",
+          "minute": "",
+          "ownGoal": true,
+          "note": "selvmål"
+        }
+      ]
+    },
+    {
+      "matchNumber": 19,
+      "goals": [
+        {
+          "team": "Argentina",
+          "player": "Lionel Messi",
+          "minute": ""
+        },
+        {
+          "team": "Argentina",
+          "player": "Lionel Messi",
+          "minute": ""
+        },
+        {
+          "team": "Argentina",
+          "player": "Lionel Messi",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 20,
+      "goals": [
+        {
+          "team": "Østrig",
+          "player": "Romano Schmid",
+          "minute": "20'"
+        },
+        {
+          "team": "Jordan",
+          "player": "Ali Olwan",
+          "minute": ""
+        },
+        {
+          "team": "Østrig",
+          "player": "Yazan Al-Arab",
+          "minute": "",
+          "ownGoal": true,
+          "note": "selvmål"
+        },
+        {
+          "team": "Østrig",
+          "player": "Marko Arnautović",
+          "minute": "",
+          "note": "straffe"
+        }
+      ]
+    },
+    {
+      "matchNumber": 21,
+      "goals": [
+        {
+          "team": "Ghana",
+          "player": "Caleb Yirenkyi",
+          "minute": "90+5'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 22,
+      "goals": [
+        {
+          "team": "England",
+          "player": "Harry Kane",
+          "minute": "",
+          "note": "straffe"
+        },
+        {
+          "team": "Kroatien",
+          "player": "Martin Baturina",
+          "minute": ""
+        },
+        {
+          "team": "England",
+          "player": "Harry Kane",
+          "minute": ""
+        },
+        {
+          "team": "Kroatien",
+          "player": "Petar Musa",
+          "minute": ""
+        },
+        {
+          "team": "England",
+          "player": "Jude Bellingham",
+          "minute": ""
+        },
+        {
+          "team": "England",
+          "player": "Marcus Rashford",
+          "minute": ""
+        }
+      ]
+    },
+    {
+      "matchNumber": 23,
+      "goals": [
+        {
+          "team": "Portugal",
+          "player": "João Neves",
+          "minute": "6'"
+        },
+        {
+          "team": "DR Congo",
+          "player": "Yoane Wissa",
+          "minute": "45'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 24,
+      "goals": [
+        {
+          "team": "Colombia",
+          "player": "Daniel Muñoz",
+          "minute": "40'"
+        },
+        {
+          "team": "Usbekistan",
+          "player": "Abbosbek Fayzullaev",
+          "minute": "60'"
+        },
+        {
+          "team": "Colombia",
+          "player": "Luis Díaz",
+          "minute": "65'"
+        },
+        {
+          "team": "Colombia",
+          "player": "Jaminton Campaz",
+          "minute": "90+'"
+        }
+      ]
+    },
+    {
+      "matchNumber": 25,
+      "goals": [
+        {
+          "team": "Tjekkiet",
+          "player": "Michal Sadílek",
+          "minute": "5'"
+        },
+        {
+          "team": "Sydafrika",
+          "player": "Teboho Mokoena",
+          "minute": "83'",
+          "note": "straffe"
+        }
+      ]
+    },
+    {
+      "matchNumber": 26,
+      "goals": [
+        {
+          "team": "Bosnien-Hercegovina",
+          "player": "Ermin Mahmić",
+          "minute": ""
+        },
+        {
+          "team": "Schweiz",
+          "player": "Johan Manzambi",
+          "minute": "75'"
+        },
+        {
+          "team": "Schweiz",
+          "player": "Ruben Vargas",
+          "minute": ""
+        },
+        {
+          "team": "Schweiz",
+          "player": "Johan Manzambi",
+          "minute": ""
+        },
+        {
+          "team": "Schweiz",
+          "player": "Granit Xhaka",
+          "minute": "90+'",
+          "note": "straffe"
+        }
       ]
     }
   ]
