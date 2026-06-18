@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#08121f" />
   <title>VM 2026 mobilguide</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="scorers.css" />
 </head>
 <body>
 <div class="stickyTop">
@@ -22,6 +23,7 @@
   <button class="tab" data-view="structure">Struktur</button>
   <button class="tab" data-view="favorites">VM favoritter</button>
   <button class="tab" data-view="rules">Vigtige regler</button>
+  <button class="tab" data-view="scorers">Topscorere</button>
 </nav>
   <div class="quickFilterBar" aria-label="Tidsfiltre">
     <button class="chip active" data-filter="all">Alle</button><button class="chip" data-filter="today">I dag</button><button class="chip" data-filter="tomorrow">I morgen</button><button class="chip" data-filter="upcoming">Kommende</button><button class="chip" data-filter="finished">Resultater</button><button class="chip" data-filter="knockout">Slutspil</button>
@@ -51,6 +53,7 @@
 <section id="structureView" class="view"><section class="panel"><h2>Turneringsstruktur</h2><div id="structureList"></div></section></section>
 <section id="favoritesView" class="view"><section class="panel"><h2>VM favoritter</h2><p class="muted">Markedsoverblik med vinderodds og prediction-market bud. Ikke en spilleanbefaling.</p><div id="favoritesList"></div></section></section>
 <section id="rulesView" class="view"><section class="panel"><h2>Vigtige regler</h2><div id="rulesList"></div></section></section>
+<section id="scorersView" class="view"><section class="panel"><h2>Topscorere</h2><p class="muted">Beregnes automatisk ud fra målscorerdata i kampene.</p><div id="scorersList"></div></section></section>
 </main>
 <footer><p>Data: FIFA/Roadtrips, TV 2 sendeplan, DR/TV oplysninger og markedskilder. Brug “Opdatér VM siden” her i projektet, når data skal opdateres.</p></footer>
 <script src="app.js" defer></script>
