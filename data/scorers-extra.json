@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-06-19T01:25:00+02:00",
+  "sourceNotes": [
+    "Ekstra målscorerdata for kampe efter hovedfilens completeThroughMatchNumber.",
+    "Canada - Qatar: Guardian liveblog 18. juni 2026: Larin 16, David 29 og David 45+3."
+  ],
+  "matches": [
+    {
+      "matchNumber": 27,
+      "goals": [
+        { "team": "Canada", "player": "Cyle Larin", "minute": "16'" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "29'" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "45+3'" }
+      ]
+    }
+  ]
+}
