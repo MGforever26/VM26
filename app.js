@@ -50,19 +50,35 @@ function getGoals(m){
   if(!goals.length && m.scorers){ goals=goals.concat(parseScorerList(m.scorers, '')); }
   return goals.filter(function(g){return g.player;});
 }
+function goalItemHtml(g){
+  var meta=[];
+  meta.push(g.minute ? g.minute : 'minut mangler');
+  if(g.ownGoal) meta.push('selvmål');
+  if(g.note) meta.push(g.note);
+  return '<div class="goalPill"><span class="goalPlayer">'+esc(g.player)+'</span><span class="goalMinute">'+esc(meta.join(' · '))+'</span></div>';
+}
+function goalColumnHtml(title, goals){
+  var h='<div class="goalColumn"><div class="goalTeamTitle">'+esc(title)+'</div>';
+  if(goals.length){ goals.forEach(function(g){h+=goalItemHtml(g)}); }
+  else { h+='<div class="goalEmpty">Ingen mål</div>'; }
+  h+='</div>';
+  return h;
+}
 function goalsHtml(m){
   var goals=getGoals(m);
-  var h='<div class="goalDetails">';
+  var h='<div class="goalDetails compactGoalDetails">';
   if(goals.length){
-    h+='<div class="detailTitle">Målscorere</div><ul class="goalList">';
-    goals.forEach(function(g){h+='<li><span>'+esc(g.player)+'</span><em>'+esc((g.team?g.team+' · ':'')+(g.minute||'')+(g.ownGoal?' · selvmål':'')+(g.note?' · '+g.note:''))+'</em></li>'});
-    h+='</ul>';
+    var home=goals.filter(function(g){return g.team===m.homeTeam});
+    var away=goals.filter(function(g){return g.team===m.awayTeam});
+    var other=goals.filter(function(g){return g.team!==m.homeTeam && g.team!==m.awayTeam});
+    h+='<div class="goalColumns">'+goalColumnHtml(m.homeTeam,home)+goalColumnHtml(m.awayTeam,away)+'</div>';
+    if(other.length){h+='<div class="goalOther">'; other.forEach(function(g){h+=goalItemHtml(g)}); h+='</div>';}
   } else if(m.status==='finished' && m.homeScore!=null){
-    h+='<div class="detailTitle">Målscorere</div><p class="empty">Målscorere er ikke lagt ind for denne kamp endnu.</p>';
+    h+='<p class="empty compactEmpty">Målscorere er ikke lagt ind for denne kamp endnu.</p>';
   } else {
-    h+='<div class="detailTitle">Kampdetaljer</div><p class="empty">Målscorere vises her, når kampen er spillet og data er opdateret.</p>';
+    h+='<p class="empty compactEmpty">Målscorere vises her, når kampen er spillet og data er opdateret.</p>';
   }
-  h+='<div class="detailMeta">'+esc(m.stadium)+', '+esc(m.city)+' · '+esc(m.channel||'Kanal afventer')+'</div></div>';
+  h+='<div class="detailMeta compactMeta">'+esc(m.stadium)+', '+esc(m.city)+' · '+esc(m.channel||'Kanal afventer')+'</div></div>';
   return h;
 }
 function card(m){var score=(m.status==='finished'&&m.homeScore!=null)?' '+m.homeScore+' - '+m.awayScore:''; return '<details class="card '+(m.status==='finished'?'finished':'')+'"><summary class="matchSummary"><div class="meta"><span>'+esc(m.danishTime)+'</span><span>·</span><span>'+esc(m.group||m.stage)+'</span><span>·</span>'+channelBadge(m)+'</div><div class="teams">'+esc(m.homeTeam)+' - '+esc(m.awayTeam)+score+'</div><div class="venue">'+esc(m.stadium)+', '+esc(m.city)+' · Lokal tid '+esc(m.localTime)+'</div><div class="tapHint">Tryk for målscorere</div></summary>'+goalsHtml(m)+'</details>'}
