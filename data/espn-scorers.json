@@ -1,5 +1,112 @@
 {
-  "generatedAt": null,
-  "source": "ESPN auto updater",
-  "matches": []
+  "coverage": {
+    "eventsMapped": 72,
+    "matchesWithCompleteMinutes": 0,
+    "matchesWithGoals": 0
+  },
+  "errors": [
+    {
+      "error": "fetch failed",
+      "eventId": "66456904",
+      "matchNumber": 1
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456906",
+      "matchNumber": 2
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456916",
+      "matchNumber": 3
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456940",
+      "matchNumber": 4
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456930",
+      "matchNumber": 5
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456942",
+      "matchNumber": 6
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456928",
+      "matchNumber": 7
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456918",
+      "matchNumber": 8
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457072",
+      "matchNumber": 9
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457070",
+      "matchNumber": 10
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456968",
+      "matchNumber": 11
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456970",
+      "matchNumber": 12
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456996",
+      "matchNumber": 13
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456994",
+      "matchNumber": 14
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456984",
+      "matchNumber": 15
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66456982",
+      "matchNumber": 16
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457006",
+      "matchNumber": 17
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457008",
+      "matchNumber": 18
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457018",
+      "matchNumber": 19
+    },
+    {
+      "error": "fetch failed",
+      "eventId": "66457020",
+      "matchNumber": 20
+    }
+  ],
+  "generatedAt": "2026-06-18T23:41:53.920633+00:00",
+  "matches": [],
+  "source": "ESPN summary API via GitHub Actions"
 }
