@@ -14,6 +14,8 @@
     67:'66457050', 68:'66457052', 69:'66457038', 70:'66457040', 71:'66457026', 72:'66457028'
   };
 
+  var running = false;
+  var lastRun = 0;
   function wait(ms){ return new Promise(function(resolve){ setTimeout(resolve, ms); }); }
   async function waitForApp(){
     for(var i=0;i<120;i++){
@@ -34,25 +36,29 @@
     return '';
   }
   function firstPlayer(play){
-    var pools = [play.athletesInvolved, play.participants, play.involvedAthletes];
+    var pools = [play.athletesInvolved, play.participants, play.involvedAthletes, play.athletes];
     for(var i=0;i<pools.length;i++){
       var arr=pools[i];
       if(Array.isArray(arr) && arr.length){
         for(var j=0;j<arr.length;j++){
           var a=arr[j];
           if(a && a.displayName) return a.displayName;
+          if(a && a.fullName) return a.fullName;
           if(a && a.athlete && a.athlete.displayName) return a.athlete.displayName;
+          if(a && a.athlete && a.athlete.fullName) return a.athlete.fullName;
           if(a && a.player && a.player.displayName) return a.player.displayName;
         }
       }
     }
     var txt = play.text || play.shortText || play.displayText || '';
-    var m = txt.match(/^([^,(]+)\s*(?:\(|,|scores|scored|Goal)/i);
+    var m = txt.match(/^([^,(]+)\s*(?:\(|,|scores|scored|goal|Goal)/i);
     return m ? m[1].trim() : txt.trim();
   }
   function isGoalPlay(play){
+    if(play.scoringPlay === true) return true;
+    if(Number(play.scoreValue||0) > 0) return true;
     var t = norm([play.type && play.type.text, play.type && play.type.name, play.text, play.shortText, play.displayText].join(' '));
-    return /\bgoal\b/.test(t) || /own goal/.test(t) || /penalty/.test(t);
+    return /\bgoal\b/.test(t) || /own goal/.test(t);
   }
   function getCompetition(summary){
     if(summary.header && summary.header.competitions && summary.header.competitions[0]) return summary.header.competitions[0];
@@ -66,7 +72,7 @@
         var side = c.homeAway === 'home' ? match.homeTeam : c.homeAway === 'away' ? match.awayTeam : '';
         if(c.team){
           if(c.team.id) map[String(c.team.id)] = side;
-          [c.team.displayName, c.team.shortDisplayName, c.team.name, c.team.abbreviation].forEach(function(n){ if(n) map[norm(n)] = side; });
+          [c.team.displayName, c.team.shortDisplayName, c.team.name, c.team.abbreviation, c.team.location].forEach(function(n){ if(n) map[norm(n)] = side; });
         }
       });
     }
@@ -77,14 +83,14 @@
   function teamForPlay(play, teamMap){
     if(play.team){
       if(play.team.id && teamMap[String(play.team.id)]) return teamMap[String(play.team.id)];
-      var names=[play.team.displayName, play.team.shortDisplayName, play.team.name, play.team.abbreviation];
+      var names=[play.team.displayName, play.team.shortDisplayName, play.team.name, play.team.abbreviation, play.team.location];
       for(var i=0;i<names.length;i++){ if(names[i] && teamMap[norm(names[i])]) return teamMap[norm(names[i])]; }
     }
     return '';
   }
   function collectPlays(summary){
     var plays=[];
-    ['scoringPlays','scoringplays'].forEach(function(k){ if(Array.isArray(summary[k])) plays=plays.concat(summary[k]); });
+    ['scoringPlays','scoringplays','plays'].forEach(function(k){ if(Array.isArray(summary[k])) plays=plays.concat(summary[k]); });
     if(summary.drives && Array.isArray(summary.drives.previous)){
       summary.drives.previous.forEach(function(d){ if(Array.isArray(d.plays)) plays=plays.concat(d.plays); });
     }
@@ -92,6 +98,24 @@
     if(comp && Array.isArray(comp.details)) plays=plays.concat(comp.details);
     if(summary.competitions && summary.competitions[0] && Array.isArray(summary.competitions[0].details)) plays=plays.concat(summary.competitions[0].details);
     return plays;
+  }
+  function updateMatchStatusAndScore(summary, match){
+    var comp=getCompetition(summary), changed=false;
+    if(!comp) return false;
+    if(comp.status && comp.status.type){
+      var type=comp.status.type;
+      var nextStatus = type.completed ? 'finished' : (type.state === 'in' || type.name === 'STATUS_IN_PROGRESS' ? 'live' : match.status);
+      if(nextStatus && nextStatus !== match.status){ match.status = nextStatus; changed = true; }
+    }
+    if(Array.isArray(comp.competitors)){
+      comp.competitors.forEach(function(c){
+        var score = c.score !== undefined && c.score !== null && c.score !== '' ? Number(c.score) : null;
+        if(score === null || isNaN(score)) return;
+        if(c.homeAway === 'home' && match.homeScore !== score){ match.homeScore = score; changed = true; }
+        if(c.homeAway === 'away' && match.awayScore !== score){ match.awayScore = score; changed = true; }
+      });
+    }
+    return changed;
   }
   function goalsFromSummary(summary, match){
     var teamMap=buildTeamMap(summary, match);
@@ -111,26 +135,38 @@
     });
     return goals;
   }
-  async function fetchEspnGoals(match){
-    var id=ESPN_EVENT_BY_MATCH[String(match.matchNumber)];
-    if(!id) return [];
-    var url='https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event='+encodeURIComponent(id);
-    var res=await fetch(url,{cache:'no-store'});
-    if(!res.ok) return [];
-    var summary=await res.json();
-    return goalsFromSummary(summary, match);
+  function shouldCheck(match){
+    if(!ESPN_EVENT_BY_MATCH[String(match.matchNumber)]) return false;
+    if(match.status === 'finished' || match.status === 'live') return true;
+    if(match.homeScore !== null && match.homeScore !== undefined) return true;
+    var dt = Date.parse(match.danishDateTime || '');
+    if(!isNaN(dt)) return dt <= Date.now() + 4*60*60*1000;
+    return false;
   }
-  async function run(){
+  async function fetchSummary(match){
+    var id=ESPN_EVENT_BY_MATCH[String(match.matchNumber)];
+    var url='https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event='+encodeURIComponent(id)+'&cacheBust='+Date.now();
+    var res=await fetch(url,{cache:'no-store'});
+    if(!res.ok) return null;
+    return await res.json();
+  }
+  async function refreshFromEspn(){
+    if(running) return;
     var ready=await waitForApp();
     if(!ready) return;
+    running=true;
+    lastRun=Date.now();
     var changed=false;
-    var matches=window.DATA.matches.filter(function(m){return m.status==='finished' && m.homeScore!=null;});
+    var matches=window.DATA.matches.filter(shouldCheck);
     for(var i=0;i<matches.length;i++){
       var m=matches[i];
       try{
-        var goals=await fetchEspnGoals(m);
+        var summary=await fetchSummary(m);
+        if(!summary) continue;
+        if(updateMatchStatusAndScore(summary, m)) changed=true;
+        var goals=goalsFromSummary(summary, m);
         var expected=Number(m.homeScore||0)+Number(m.awayScore||0);
-        if(goals.length && goals.length===expected){
+        if(goals.length && (!expected || goals.length===expected)){
           m.goals=goals;
           changed=true;
         }
@@ -138,8 +174,15 @@
     }
     if(changed){
       window.renderMatches();
+      window.renderStandings && window.renderStandings();
       window.renderScorers();
     }
+    running=false;
   }
-  run();
+  function scheduleSoon(){ setTimeout(refreshFromEspn, 1200); }
+  window.addEventListener('vmScorersLoaded', scheduleSoon);
+  window.addEventListener('focus', function(){ if(Date.now()-lastRun > 60000) refreshFromEspn(); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && Date.now()-lastRun > 60000) refreshFromEspn(); });
+  setTimeout(refreshFromEspn, 3500);
+  setInterval(refreshFromEspn, 5*60*1000);
 })();
