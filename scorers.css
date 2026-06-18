@@ -1,0 +1,17 @@
+/* Match details and top scorer tab */
+.card{display:block;}
+.matchSummary{list-style:none;cursor:pointer;}
+.matchSummary::-webkit-details-marker{display:none;}
+.tapHint{font-size:12px;color:var(--accent);font-weight:800;margin-top:5px;}
+.goalDetails{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
+.detailTitle{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:850;margin-bottom:7px;}
+.goalList{list-style:none;margin:0;padding:0;display:grid;gap:7px;}
+.goalList li{display:flex;justify-content:space-between;gap:10px;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;padding:8px 9px;}
+.goalList span{font-weight:800;}
+.goalList em{font-style:normal;color:var(--muted);font-size:12px;text-align:right;}
+.detailMeta{font-size:12px;color:var(--muted);margin-top:9px;}
+.scorerTable{display:grid;gap:6px;}
+.scorerRow{display:grid;grid-template-columns:1.4fr 1fr 48px;gap:8px;align-items:center;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;padding:9px 10px;font-size:14px;}
+.scorerHead{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;background:transparent;border-color:transparent;padding-bottom:3px;}
+.scorerRow strong{text-align:right;color:var(--accent);font-size:18px;}
+@media (max-width:430px){.scorerRow{grid-template-columns:1.4fr .9fr 42px;font-size:13px}.goalList li{display:block}.goalList em{display:block;text-align:left;margin-top:2px}}
