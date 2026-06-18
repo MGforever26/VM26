@@ -37,6 +37,7 @@
       if(count){
         window.renderMatches();
         window.renderScorers();
+        window.dispatchEvent(new CustomEvent('vmScorersLoaded'));
       }
     } catch(e){
       console.warn('Målscorerdata kunne ikke hentes', e);
