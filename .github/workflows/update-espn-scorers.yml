@@ -1,0 +1,34 @@
+name: Update ESPN scorers
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-espn-scorers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate ESPN scorer data
+        run: python scripts/update_espn_scorers.py
+
+      - name: Validate JSON
+        run: python -m json.tool data/espn-scorers.json > /tmp/espn-scorers.json
+
+      - name: Commit scorer update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/espn-scorers.json
+          if git diff --cached --quiet; then
+            echo "No ESPN scorer changes"
+            exit 0
+          fi
+          git commit -m "Update ESPN scorer data"
+          git push
