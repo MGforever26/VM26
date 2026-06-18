@@ -3,7 +3,7 @@ name: Refactor static site files
 on:
   push:
     paths:
-      - '.github/workflows/refactor-static-site.yml'
+      - 'refactor-run.txt'
   workflow_dispatch:
 
 permissions:
@@ -56,5 +56,3 @@ jobs:
           git add index.html styles.css app.js data/vm2026-data.json assets/structure.svg
           git commit -m "Split VM guide into smaller static files" || exit 0
           git push
-
-# trigger compact refactor
