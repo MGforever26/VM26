@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-06-19T09:25:00+02:00",
+  "source": "Trusted match overrides",
+  "matches": [
+    {
+      "matchNumber": 1,
+      "homeTeam": "Mexico",
+      "awayTeam": "Sydafrika",
+      "status": "finished",
+      "homeScore": 2,
+      "awayScore": 0,
+      "goals": [
+        { "team": "Mexico", "player": "Julián Quiñones", "minute": "9'" },
+        { "team": "Mexico", "player": "Raúl Jiménez", "minute": "67'" }
+      ]
+    },
+    {
+      "matchNumber": 27,
+      "homeTeam": "Canada",
+      "awayTeam": "Qatar",
+      "status": "finished",
+      "homeScore": 6,
+      "awayScore": 0,
+      "goals": [
+        { "team": "Canada", "player": "Cyle Larin", "minute": "16'" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "29'" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "45+3'" },
+        { "team": "Canada", "player": "Nathan Saliba", "minute": "64'" },
+        { "team": "Canada", "player": "Mohammad Al Mannai", "minute": "75'", "ownGoal": true, "note": "selvmål" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "90+2'" }
+      ]
+    },
+    {
+      "matchNumber": 28,
+      "homeTeam": "Mexico",
+      "awayTeam": "Sydkorea",
+      "status": "finished",
+      "homeScore": 1,
+      "awayScore": 0,
+      "goals": [
+        { "team": "Mexico", "player": "Luis Romo", "minute": "50'" }
+      ]
+    }
+  ]
+}
