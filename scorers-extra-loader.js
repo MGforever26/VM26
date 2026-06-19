@@ -15,10 +15,12 @@
     payload.matches.forEach(function(row){
       var m=byMatch[String(row.matchNumber)];
       if(!m) return;
-      if(Array.isArray(row.goals)){ m.goals=row.goals; count += row.goals.length; }
-      if(row.status) m.status=row.status;
-      if(row.homeScore !== undefined) m.homeScore=row.homeScore;
-      if(row.awayScore !== undefined) m.awayScore=row.awayScore;
+      if(row.homeTeam && row.homeTeam !== m.homeTeam) return;
+      if(row.awayTeam && row.awayTeam !== m.awayTeam) return;
+      if(Array.isArray(row.goals) && row.goals.length){
+        m.goals=row.goals;
+        count += row.goals.length;
+      }
     });
     return count;
   }
@@ -30,9 +32,9 @@
       if(!res.ok) return;
       var payload=await res.json();
       var count=merge(payload);
-      if(count){ window.renderMatches(); window.renderScorers(); window.dispatchEvent(new CustomEvent('vmScorersLoaded')); }
+      if(count){ window.renderMatches(); window.renderScorers(); }
     }catch(e){ console.warn('Ekstra målscorerdata kunne ikke hentes', e); }
   }
   window.addEventListener('vmScorersLoaded', run, {once:true});
-  setTimeout(run, 2500);
+  setTimeout(run, 1500);
 })();
