@@ -10,14 +10,14 @@
       'brazil':'brasilien','brasilien':'brasilien',
       'haiti':'haiti',
       'south korea':'sydkorea','korea republic':'sydkorea','sydkorea':'sydkorea',
-      'mexico':'mexico','mexico city':'mexico',
-      'qatar':'qatar','canada':'canada'
+      'mexico':'mexico','qatar':'qatar','canada':'canada',
+      'scotland':'skotland','skotland':'skotland','morocco':'marokko','marokko':'marokko',
+      'turkey':'tyrkiet','turkiye':'tyrkiet','tyrkiet':'tyrkiet','paraguay':'paraguay'
     };
     return map[n] || n;
   }
   function getRowHome(r){return r.homeTeam||r.home||r.home_team||r.homeName||r.hjemmehold||r.hjemme||r.team1||'';}
   function getRowAway(r){return r.awayTeam||r.away||r.away_team||r.awayName||r.udehold||r.ude||r.team2||'';}
-  function rowHasScore(r){return r.status || r.homeScore!==undefined&&r.homeScore!=='' || r.awayScore!==undefined&&r.awayScore!=='';}
   function scoreIsFinished(r){return String(r.status||'').toLowerCase()==='finished' || String(r.status||'').toLowerCase()==='complete' || String(r.status||'').toLowerCase()==='completed' || (r.homeScore!==undefined&&r.homeScore!==''&&r.awayScore!==undefined&&r.awayScore!=='');}
   function normalizeStatus(s){
     var x=String(s||'').toLowerCase();
@@ -30,11 +30,17 @@
     if(!h || !a || !window.DATA || !Array.isArray(window.DATA.matches)) return null;
     return window.DATA.matches.find(function(m){return teamAlias(m.homeTeam)===h && teamAlias(m.awayTeam)===a;}) || null;
   }
+  function teamsFromNote(note){
+    var txt=String(note||'');
+    var before=txt.split(';')[0].split(' verifi')[0].split(' verified')[0].trim();
+    var m=before.match(/^(.+?)\s+-\s+(.+?)$/);
+    if(!m) return null;
+    return {home:m[1].trim(), away:m[2].trim()};
+  }
   function isPlausibleByTime(m,r){
     if(!scoreIsFinished(r)) return true;
     var dt=Date.parse(m.danishDateTime||'');
     if(isNaN(dt)) return true;
-    // A match should not receive a final score before roughly two hours after kickoff.
     return Date.now() >= dt + 105*60*1000;
   }
   function applySafeLiveOverrides(rows){
@@ -48,6 +54,10 @@
         return;
       }
       var rowHome=getRowHome(r), rowAway=getRowAway(r);
+      if((!rowHome || !rowAway) && r.note){
+        var fromNote=teamsFromNote(r.note);
+        if(fromNote){ rowHome=fromNote.home; rowAway=fromNote.away; }
+      }
       var m=null;
       if(rowHome && rowAway){
         m=findByTeams(rowHome,rowAway);
