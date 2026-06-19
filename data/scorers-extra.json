@@ -1,16 +1,31 @@
 {
-  "generatedAt": "2026-06-19T01:25:00+02:00",
+  "generatedAt": "2026-06-19T09:40:00+02:00",
   "sourceNotes": [
     "Ekstra målscorerdata for kampe efter hovedfilens completeThroughMatchNumber.",
-    "Canada - Qatar: Guardian liveblog 18. juni 2026: Larin 16, David 29 og David 45+3."
+    "Denne fil må kun bruges til målscorere og må ikke overskrive kampresultater.",
+    "Canada - Qatar: Guardian liveblog 18. juni 2026: David hattrick, Larin, Saliba og Al-Mannai selvmål; minutter fra livebloggen.",
+    "Mexico - Sydkorea: AP bekræfter Luis Romo i 50. minut."
   ],
   "matches": [
     {
       "matchNumber": 27,
+      "homeTeam": "Canada",
+      "awayTeam": "Qatar",
       "goals": [
         { "team": "Canada", "player": "Cyle Larin", "minute": "16'" },
         { "team": "Canada", "player": "Jonathan David", "minute": "29'" },
-        { "team": "Canada", "player": "Jonathan David", "minute": "45+3'" }
+        { "team": "Canada", "player": "Jonathan David", "minute": "45+3'" },
+        { "team": "Canada", "player": "Nathan Saliba", "minute": "64'" },
+        { "team": "Canada", "player": "Mohammad Al-Mannai", "minute": "75'", "ownGoal": true, "note": "selvmål" },
+        { "team": "Canada", "player": "Jonathan David", "minute": "90+2'" }
+      ]
+    },
+    {
+      "matchNumber": 28,
+      "homeTeam": "Mexico",
+      "awayTeam": "Sydkorea",
+      "goals": [
+        { "team": "Mexico", "player": "Luis Romo", "minute": "50'" }
       ]
     }
   ]
