@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-06-19T23:55:00+02:00",
+  "source": "Trusted match overrides",
+  "matches": [
+    {
+      "matchNumber": 32,
+      "homeTeam": "USA",
+      "awayTeam": "Australien",
+      "status": "finished",
+      "homeScore": 2,
+      "awayScore": 0,
+      "goals": [
+        { "team": "USA", "player": "Cameron Burgess", "minute": "11'", "ownGoal": true, "note": "selvmål" },
+        { "team": "USA", "player": "Alex Freeman", "minute": "43'" }
+      ]
+    }
+  ]
+}
