@@ -37,9 +37,9 @@ function updateWorldCupResults() {
     const scores = getScores_(comp, fx);
     if (!scores) return;
 
-    const goals = getGoalsFromSummary_(summary, fx);
     const expectedGoals = Number(scores.homeScore) + Number(scores.awayScore);
-    const scorerFields = buildScorerFields_(goals, expectedGoals);
+    const goals = getGoalsFromSummary_(summary, fx);
+    const scorerFields = buildScorerFields_(goals, expectedGoals, fx);
 
     const oldRow = outputByMatch[String(fx.matchNumber)] || {};
     const nextRow = {
@@ -62,11 +62,8 @@ function updateWorldCupResults() {
     }
   });
 
-  if (changed || !existing.hasCorrectHeaders) {
-    writeLiveRows_(live, outputByMatch, nowIso);
-  } else {
-    writeMetaOnly_(live, nowIso);
-  }
+  if (changed || !existing.hasCorrectHeaders) writeLiveRows_(live, outputByMatch, nowIso);
+  else writeMetaOnly_(live, nowIso);
 }
 
 function ensureLiveHeaders_(sheet) {
@@ -79,7 +76,8 @@ function readExistingLiveRows_(sheet) {
   const headers = values[0] || [];
   const idx = {};
   headers.forEach(function(h, i) { idx[h] = i; });
-  const hasCorrectHeaders = ['matchNumber','status','homeScore','awayScore','lastUpdated','note','homeScorers','awayScorers','scorers','goals'].every(function(h) { return idx[h] !== undefined; });
+  const required = ['matchNumber','status','homeScore','awayScore','lastUpdated','note','homeScorers','awayScorers','scorers','goals'];
+  const hasCorrectHeaders = required.every(function(h) { return idx[h] !== undefined; });
   const byMatch = {};
   values.slice(1).forEach(function(row) {
     const matchNumber = row[idx.matchNumber] || row[0];
@@ -115,12 +113,8 @@ function writeLiveRows_(sheet, byMatch, nowIso) {
 function writeMetaOnly_(sheet, nowIso) {
   const values = sheet.getDataRange().getDisplayValues();
   let metaRow = -1;
-  for (let i = 1; i < values.length; i++) {
-    if (values[i][0] === 'meta') metaRow = i + 1;
-  }
-  if (metaRow === -1) {
-    metaRow = sheet.getLastRow() + 1;
-  }
+  for (let i = 1; i < values.length; i++) if (values[i][0] === 'meta') metaRow = i + 1;
+  if (metaRow === -1) metaRow = sheet.getLastRow() + 1;
   sheet.getRange(metaRow, 1, 1, 10).setValues([['meta','generatedAt',nowIso,'','','Apps Script ESPN structured updater','','','','']]);
 }
 
@@ -132,24 +126,17 @@ function readFixtureKey_(sheet) {
   return values.slice(1).map(function(r) {
     const sourceKey = r[idx.sourceKey] || '';
     const m = String(sourceKey).match(/ESPN\s+(\d+)/i);
-    return {
-      matchNumber: r[idx.matchNumber],
-      homeTeam: r[idx.homeTeam],
-      awayTeam: r[idx.awayTeam],
-      eventId: m ? m[1] : ''
-    };
+    return { matchNumber: r[idx.matchNumber], homeTeam: r[idx.homeTeam], awayTeam: r[idx.awayTeam], eventId: m ? m[1] : '' };
   }).filter(function(x) { return x.matchNumber && x.homeTeam && x.awayTeam; });
 }
 
 function fetchEspnSummary_(eventId) {
-  const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=' + encodeURIComponent(eventId);
+  const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=' + encodeURIComponent(eventId) + '&cacheBust=' + Date.now();
   try {
     const res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
     if (res.getResponseCode() < 200 || res.getResponseCode() >= 300) return null;
     return JSON.parse(res.getContentText());
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
 
 function getCompetition_(summary) {
@@ -170,17 +157,18 @@ function teamAlias_(s) {
     'skotland':'scotland','scotland':'scotland',
     'marokko':'morocco','morocco':'morocco',
     'brasilien':'brazil','brazil':'brazil',
-    'haiti':'haiti',
-    'mexico':'mexico','sydkorea':'south korea','south korea':'south korea','korea republic':'south korea',
-    'canada':'canada','qatar':'qatar'
+    'haiti':'haiti','tyrkiet':'turkiye','turkey':'turkiye','turkiye':'turkiye',
+    'paraguay':'paraguay','mexico':'mexico','sydkorea':'south korea','south korea':'south korea','korea republic':'south korea',
+    'canada':'canada','qatar':'qatar','netherlands':'netherlands','holland':'netherlands','sweden':'sweden',
+    'germany':'germany','tyskland':'germany','ivory coast':'ivory coast','elfenbenskysten':'ivory coast',
+    'ecuador':'ecuador','curacao':'curacao'
   };
   return map[n] || n;
 }
 
 function getScores_(comp, fx) {
-  const comps = comp.competitors || [];
   let home = null, away = null;
-  comps.forEach(function(c) {
+  (comp.competitors || []).forEach(function(c) {
     if (c.homeAway === 'home') home = c;
     if (c.homeAway === 'away') away = c;
   });
@@ -191,28 +179,31 @@ function getScores_(comp, fx) {
   return { homeScore: Number(home.score), awayScore: Number(away.score) };
 }
 
-function collectPlays_(summary) {
-  let plays = [];
-  ['scoringPlays','scoringplays','plays','commentary'].forEach(function(k) { if (Array.isArray(summary[k])) plays = plays.concat(summary[k]); });
+function collectPossibleGoalPlays_(summary) {
+  const plays = [];
+  function walk(node) {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    const txt = [node.text, node.shortText, node.displayText, node.type && node.type.text, node.type && node.type.name].join(' ');
+    if (node.scoringPlay === true || /\bgoal\b|own goal/i.test(txt)) plays.push(node);
+    Object.keys(node).forEach(function(k) {
+      if (['athlete','player','team','type'].indexOf(k) >= 0) return;
+      if (typeof node[k] === 'object') walk(node[k]);
+    });
+  }
+  walk(summary.scoringPlays || summary.scoringplays || []);
+  walk(summary.plays || []);
+  walk(summary.commentary || []);
   const comp = getCompetition_(summary);
-  if (comp) ['details','plays','commentary'].forEach(function(k) { if (Array.isArray(comp[k])) plays = plays.concat(comp[k]); });
-  if (summary.competitions && summary.competitions[0]) ['details','plays','commentary'].forEach(function(k) { if (Array.isArray(summary.competitions[0][k])) plays = plays.concat(summary.competitions[0][k]); });
-  const seen = {};
-  return plays.filter(function(p) {
-    if (!p || typeof p !== 'object') return false;
+  if (comp) { walk(comp.details || []); walk(comp.plays || []); walk(comp.commentary || []); }
+  const seen = {}, out = [];
+  plays.forEach(function(p) {
     const key = [p.id, p.text || p.shortText || p.displayText, JSON.stringify(p.clock || p.time || '')].join('|');
-    if (seen[key]) return false;
+    if (seen[key]) return;
     seen[key] = true;
-    return true;
+    out.push(p);
   });
-}
-
-function isGoalPlay_(play) {
-  if (play.scoringPlay === true) return true;
-  const type = play.type || {};
-  const blob = [type.text, type.name, type.displayName, play.text, play.shortText, play.displayText].join(' ');
-  const n = normalize_(blob);
-  return n.indexOf('own goal') >= 0 || (/\bgoal\b/.test(n) && n.indexOf('goalkeeper') === -1);
+  return out;
 }
 
 function cleanMinute_(v) {
@@ -276,13 +267,11 @@ function buildTeamMap_(summary, fx) {
       const side = c.homeAway === 'home' ? fx.homeTeam : c.homeAway === 'away' ? fx.awayTeam : '';
       if (!side || !c.team) return;
       if (c.team.id) map[String(c.team.id)] = side;
-      [c.team.displayName, c.team.shortDisplayName, c.team.name, c.team.abbreviation, c.team.location].forEach(function(n) {
-        if (n) map[normalize_(n)] = side;
-      });
+      [c.team.displayName, c.team.shortDisplayName, c.team.name, c.team.abbreviation, c.team.location].forEach(function(n) { if (n) map[teamAlias_(n)] = side; });
     });
   }
-  map[normalize_(fx.homeTeam)] = fx.homeTeam;
-  map[normalize_(fx.awayTeam)] = fx.awayTeam;
+  map[teamAlias_(fx.homeTeam)] = fx.homeTeam;
+  map[teamAlias_(fx.awayTeam)] = fx.awayTeam;
   return map;
 }
 
@@ -291,19 +280,18 @@ function teamForPlay_(play, teamMap, fx) {
   if (team) {
     if (team.id && teamMap[String(team.id)]) return teamMap[String(team.id)];
     const names = [team.displayName, team.shortDisplayName, team.name, team.abbreviation, team.location];
-    for (let i = 0; i < names.length; i++) if (names[i] && teamMap[normalize_(names[i])]) return teamMap[normalize_(names[i])];
+    for (let i = 0; i < names.length; i++) if (names[i] && teamMap[teamAlias_(names[i])]) return teamMap[teamAlias_(names[i])];
   }
   const text = normalize_([play.text, play.shortText, play.displayText].join(' '));
-  if (text.indexOf(normalize_(fx.homeTeam)) >= 0) return fx.homeTeam;
-  if (text.indexOf(normalize_(fx.awayTeam)) >= 0) return fx.awayTeam;
+  if (text.indexOf(normalize_(fx.homeTeam)) >= 0 || text.indexOf(teamAlias_(fx.homeTeam)) >= 0) return fx.homeTeam;
+  if (text.indexOf(normalize_(fx.awayTeam)) >= 0 || text.indexOf(teamAlias_(fx.awayTeam)) >= 0) return fx.awayTeam;
   return '';
 }
 
 function getGoalsFromSummary_(summary, fx) {
   const teamMap = buildTeamMap_(summary, fx);
   const out = [];
-  collectPlays_(summary).forEach(function(play) {
-    if (!isGoalPlay_(play)) return;
+  collectPossibleGoalPlays_(summary).forEach(function(play) {
     const player = firstPlayer_(play);
     const minute = clockToMinute_(play);
     const team = teamForPlay_(play, teamMap, fx);
@@ -311,25 +299,28 @@ function getGoalsFromSummary_(summary, fx) {
     if (!player || !minute || !team) return;
     out.push({ team: team, player: player, minute: minute, ownGoal: /own goal|selvmål/i.test(text) });
   });
-  return out;
+  const seen = {}, deduped = [];
+  out.forEach(function(g) {
+    const key = [teamAlias_(g.team), g.player, g.minute, g.ownGoal ? 'og' : ''].join('|').toLowerCase();
+    if (seen[key]) return;
+    seen[key] = true;
+    deduped.push(g);
+  });
+  return deduped;
 }
 
-function buildScorerFields_(goals, expectedGoals) {
+function scorerText_(g) { return g.player + ' ' + g.minute + (g.ownGoal ? ' selvmål' : ''); }
+
+function buildScorerFields_(goals, expectedGoals, fx) {
   if (!goals || goals.length !== expectedGoals || goals.some(function(g) { return !g.team || !g.player || !g.minute; })) {
     return { homeScorers: '', awayScorers: '', scorers: '', goals: '' };
   }
-  const home = [];
-  const away = [];
-  const all = [];
-  goals.forEach(function(g) {
-    const text = g.player + ' ' + g.minute + (g.ownGoal ? ' selvmål' : '');
-    all.push(text);
-    if (teamAlias_(g.team) === teamAlias_(goals[0].team) && false) {}
-  });
+  const home = goals.filter(function(g) { return teamAlias_(g.team) === teamAlias_(fx.homeTeam); }).map(scorerText_);
+  const away = goals.filter(function(g) { return teamAlias_(g.team) === teamAlias_(fx.awayTeam); }).map(scorerText_);
   return {
-    homeScorers: goals.filter(function(g) { return false; }).map(function(g) { return g.player + ' ' + g.minute + (g.ownGoal ? ' selvmål' : ''); }).join('; '),
-    awayScorers: '',
-    scorers: all.join('; '),
+    homeScorers: home.join('; '),
+    awayScorers: away.join('; '),
+    scorers: goals.map(scorerText_).join('; '),
     goals: goals.map(function(g) { return [g.team, g.player, g.minute, g.ownGoal ? 'selvmål' : ''].join('|').replace(/\|$/,''); }).join('; ')
   };
 }
