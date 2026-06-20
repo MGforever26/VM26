@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-06-19T09:40:00+02:00",
+  "generatedAt": "2026-06-20T02:05:00+02:00",
   "sourceNotes": [
     "Ekstra målscorerdata for kampe efter hovedfilens completeThroughMatchNumber.",
     "Denne fil må kun bruges til målscorere og må ikke overskrive kampresultater.",
     "Canada - Qatar: Guardian liveblog 18. juni 2026: David hattrick, Larin, Saliba og Al-Mannai selvmål; minutter fra livebloggen.",
-    "Mexico - Sydkorea: AP bekræfter Luis Romo i 50. minut."
+    "Mexico - Sydkorea: AP bekræfter Luis Romo i 50. minut.",
+    "Skotland - Marokko: Guardian liveblog 19. juni 2026: Ismael Saibari efter 71 sekunder, registreret som 2. minut."
   ],
   "matches": [
     {
@@ -26,6 +27,14 @@
       "awayTeam": "Sydkorea",
       "goals": [
         { "team": "Mexico", "player": "Luis Romo", "minute": "50'" }
+      ]
+    },
+    {
+      "matchNumber": 30,
+      "homeTeam": "Skotland",
+      "awayTeam": "Marokko",
+      "goals": [
+        { "team": "Marokko", "player": "Ismael Saibari", "minute": "2'" }
       ]
     }
   ]
