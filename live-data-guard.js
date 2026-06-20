@@ -12,7 +12,20 @@
       'south korea':'sydkorea','korea republic':'sydkorea','sydkorea':'sydkorea',
       'mexico':'mexico','qatar':'qatar','canada':'canada',
       'scotland':'skotland','skotland':'skotland','morocco':'marokko','marokko':'marokko',
-      'turkey':'tyrkiet','turkiye':'tyrkiet','tyrkiet':'tyrkiet','paraguay':'paraguay'
+      'turkey':'tyrkiet','turkiye':'tyrkiet','tyrkiet':'tyrkiet','paraguay':'paraguay',
+      'netherlands':'holland','holland':'holland','nederlandene':'holland',
+      'sweden':'sverige','sverige':'sverige',
+      'tunisia':'tunesien','tunesien':'tunesien','japan':'japan',
+      'germany':'tyskland','tyskland':'tyskland','deutschland':'tyskland',
+      'ivory coast':'elfenbenskysten','cote d ivoire':'elfenbenskysten','elfenbenskysten':'elfenbenskysten',
+      'ecuador':'ecuador','curacao':'curacao',
+      'spain':'spanien','spanien':'spanien','saudi arabia':'saudi arabien','saudi arabien':'saudi arabien',
+      'uruguay':'uruguay','cape verde':'kap verde','kap verde':'kap verde',
+      'belgium':'belgien','belgien':'belgien','iran':'iran','new zealand':'new zealand','egypt':'egypten','egypten':'egypten',
+      'france':'frankrig','frankrig':'frankrig','iraq':'irak','irak':'irak','norway':'norge','norge':'norge','senegal':'senegal',
+      'argentina':'argentina','austria':'ostrig','austria':'ostrig','ostrig':'ostrig','jordan':'jordan','algeria':'algeriet','algeriet':'algeriet',
+      'portugal':'portugal','uzbekistan':'usbekistan','usbekistan':'usbekistan','colombia':'colombia','dr congo':'dr congo','democratic republic of congo':'dr congo',
+      'england':'england','ghana':'ghana','panama':'panama','croatia':'kroatien','kroatien':'kroatien'
     };
     return map[n] || n;
   }
