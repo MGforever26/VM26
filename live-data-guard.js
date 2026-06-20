@@ -25,7 +25,11 @@
       'france':'frankrig','frankrig':'frankrig','iraq':'irak','irak':'irak','norway':'norge','norge':'norge','senegal':'senegal',
       'argentina':'argentina','austria':'ostrig','austria':'ostrig','ostrig':'ostrig','jordan':'jordan','algeria':'algeriet','algeriet':'algeriet',
       'portugal':'portugal','uzbekistan':'usbekistan','usbekistan':'usbekistan','colombia':'colombia','dr congo':'dr congo','democratic republic of congo':'dr congo',
-      'england':'england','ghana':'ghana','panama':'panama','croatia':'kroatien','kroatien':'kroatien'
+      'england':'england','ghana':'ghana','panama':'panama','croatia':'kroatien','kroatien':'kroatien',
+      'czechia':'tjekkiet','czech republic':'tjekkiet','tjekkiet':'tjekkiet',
+      'south africa':'sydafrika','sydafrika':'sydafrika',
+      'switzerland':'schweiz','schweiz':'schweiz',
+      'bosnia and herzegovina':'bosnien hercegovina','bosnia herzegovina':'bosnien hercegovina','bosnien hercegovina':'bosnien hercegovina'
     };
     return map[n] || n;
   }
@@ -55,6 +59,16 @@
     var dt=Date.parse(m.danishDateTime||'');
     if(isNaN(dt)) return true;
     return Date.now() >= dt + 105*60*1000;
+  }
+  function markSkippedRows(skipped){
+    if(!skipped || !skipped.length) return;
+    setTimeout(function(){
+      var el=document.getElementById('updated');
+      if(!el) return;
+      var base=el.textContent || '';
+      if(base.indexOf('live-matchfejl') === -1) el.textContent = base + ' · live-matchfejl';
+      el.title = 'Live-rækker kunne ikke matches: ' + skipped.slice(0,5).join(' | ');
+    },0);
   }
   function applySafeLiveOverrides(rows){
     var updatedAt='';
@@ -95,6 +109,7 @@
       ['homeScorers','awayScorers','scorers','goals'].forEach(function(k){if(r[k])m[k]=r[k];});
     });
     window.__VM_LIVE_GUARD__={updatedAt:updatedAt,skipped:skipped.slice(0,20)};
+    markSkippedRows(skipped);
     if(updatedAt) window.DATA.meta.generatedAt=updatedAt;
     return updatedAt;
   }
