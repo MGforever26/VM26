@@ -60,16 +60,6 @@
     if(isNaN(dt)) return true;
     return Date.now() >= dt + 105*60*1000;
   }
-  function markSkippedRows(skipped){
-    if(!skipped || !skipped.length) return;
-    setTimeout(function(){
-      var el=document.getElementById('updated');
-      if(!el) return;
-      var base=el.textContent || '';
-      if(base.indexOf('live-matchfejl') === -1) el.textContent = base + ' · live-matchfejl';
-      el.title = 'Live-rækker kunne ikke matches: ' + skipped.slice(0,5).join(' | ');
-    },0);
-  }
   function applySafeLiveOverrides(rows){
     var updatedAt='';
     var byMatch={};
@@ -109,7 +99,7 @@
       ['homeScorers','awayScorers','scorers','goals'].forEach(function(k){if(r[k])m[k]=r[k];});
     });
     window.__VM_LIVE_GUARD__={updatedAt:updatedAt,skipped:skipped.slice(0,20)};
-    markSkippedRows(skipped);
+    if(skipped.length) console.warn('VM live-rækker sprang over match:', skipped.slice(0,20));
     if(updatedAt) window.DATA.meta.generatedAt=updatedAt;
     return updatedAt;
   }
