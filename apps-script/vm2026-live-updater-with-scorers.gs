@@ -40,6 +40,7 @@ function updateWorldCupResults() {
     const expectedGoals = Number(scores.homeScore) + Number(scores.awayScore);
     const goals = getGoalsFromSummary_(summary, fx);
     const scorerFields = buildScorerFields_(goals, expectedGoals, fx);
+    const scorerNote = scorerFields.partialNote ? '; scorer ' + scorerFields.partialNote : '';
 
     const oldRow = outputByMatch[String(fx.matchNumber)] || {};
     const nextRow = {
@@ -48,7 +49,7 @@ function updateWorldCupResults() {
       homeScore: String(scores.homeScore),
       awayScore: String(scores.awayScore),
       lastUpdated: nowIso,
-      note: fx.homeTeam + ' - ' + fx.awayTeam + '; ESPN structured scoreboard',
+      note: fx.homeTeam + ' - ' + fx.awayTeam + '; ESPN structured scoreboard' + scorerNote,
       homeScorers: scorerFields.homeScorers || oldRow.homeScorers || '',
       awayScorers: scorerFields.awayScorers || oldRow.awayScorers || '',
       scorers: scorerFields.scorers || oldRow.scorers || '',
@@ -57,7 +58,17 @@ function updateWorldCupResults() {
 
     if (!sameRow_(oldRow, nextRow)) {
       outputByMatch[String(fx.matchNumber)] = nextRow;
-      appendAudit_(ss, nowIso, 'update finished match', fx.matchNumber, fx.homeTeam + ' - ' + fx.awayTeam, scores.homeScore + '-' + scores.awayScore, scorerFields.goals || 'no verified scorer data', 'ESPN summary/scoreboard', 'Sheet1 A:J');
+      appendAudit_(
+        ss,
+        nowIso,
+        'update finished match',
+        fx.matchNumber,
+        fx.homeTeam + ' - ' + fx.awayTeam,
+        scores.homeScore + '-' + scores.awayScore,
+        scorerFields.audit || scorerFields.goals || 'no verified scorer data',
+        'ESPN summary/scoreboard',
+        'Sheet1 A:J'
+      );
       changed = true;
     }
   });
@@ -146,22 +157,48 @@ function getCompetition_(summary) {
 }
 
 function normalize_(s) {
-  return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  return String(s || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'o')
+    .replace(/å/g, 'a')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 }
 
 function teamAlias_(s) {
   const n = normalize_(s);
   const map = {
-    'usa':'united states','united states':'united states','united states of america':'united states',
+    'usa':'united states','united states':'united states','united states of america':'united states','us':'united states',
     'australien':'australia','australia':'australia',
+    'brasilien':'brazil','brazil':'brazil',
+    'haiti':'haiti',
     'skotland':'scotland','scotland':'scotland',
     'marokko':'morocco','morocco':'morocco',
-    'brasilien':'brazil','brazil':'brazil',
-    'haiti':'haiti','tyrkiet':'turkiye','turkey':'turkiye','turkiye':'turkiye',
-    'paraguay':'paraguay','mexico':'mexico','sydkorea':'south korea','south korea':'south korea','korea republic':'south korea',
-    'canada':'canada','qatar':'qatar','netherlands':'netherlands','holland':'netherlands','sweden':'sweden',
-    'germany':'germany','tyskland':'germany','ivory coast':'ivory coast','elfenbenskysten':'ivory coast',
-    'ecuador':'ecuador','curacao':'curacao'
+    'tyrkiet':'turkiye','turkey':'turkiye','turkiye':'turkiye',
+    'paraguay':'paraguay',
+    'mexico':'mexico',
+    'sydkorea':'south korea','south korea':'south korea','korea republic':'south korea',
+    'canada':'canada','qatar':'qatar',
+    'netherlands':'netherlands','holland':'netherlands','nederlandene':'netherlands',
+    'sweden':'sweden','sverige':'sweden',
+    'tunisia':'tunisia','tunesien':'tunisia','japan':'japan',
+    'germany':'germany','tyskland':'germany','deutschland':'germany',
+    'ivory coast':'ivory coast','cote d ivoire':'ivory coast','elfenbenskysten':'ivory coast',
+    'ecuador':'ecuador','curacao':'curacao',
+    'spain':'spain','spanien':'spain','saudi arabia':'saudi arabia','saudi arabien':'saudi arabia',
+    'uruguay':'uruguay','cape verde':'cape verde','kap verde':'cape verde',
+    'belgium':'belgium','belgien':'belgium','iran':'iran','new zealand':'new zealand','egypt':'egypt','egypten':'egypt',
+    'france':'france','frankrig':'france','iraq':'iraq','irak':'iraq','norway':'norway','norge':'norway','senegal':'senegal',
+    'argentina':'argentina','austria':'austria','ostrig':'austria','jordan':'jordan','algeria':'algeria','algeriet':'algeria',
+    'portugal':'portugal','uzbekistan':'uzbekistan','usbekistan':'uzbekistan','colombia':'colombia','dr congo':'dr congo','democratic republic of congo':'dr congo',
+    'england':'england','ghana':'ghana','panama':'panama','croatia':'croatia','kroatien':'croatia',
+    'czechia':'czechia','czech republic':'czechia','tjekkiet':'czechia',
+    'south africa':'south africa','sydafrika':'south africa',
+    'switzerland':'switzerland','schweiz':'switzerland',
+    'bosnia and herzegovina':'bosnia and herzegovina','bosnia herzegovina':'bosnia and herzegovina','bosnien hercegovina':'bosnia and herzegovina'
   };
   return map[n] || n;
 }
@@ -224,7 +261,7 @@ function clockToMinute_(play) {
       const d = c.displayValue || c.display || c.text || c.shortDisplayValue || '';
       const cd = cleanMinute_(d);
       if (cd) return cd;
-      if (typeof c.value === 'number' && c.value > 0) return Math.ceil(c.value / 60) + "'";
+      if (typeof c.value === 'number' && c.value > 0 && c.value <= 130 * 60) return Math.ceil(c.value / 60) + "'";
     } else {
       const x = cleanMinute_(c);
       if (x) return x;
@@ -312,16 +349,52 @@ function getGoalsFromSummary_(summary, fx) {
 function scorerText_(g) { return g.player + ' ' + g.minute + (g.ownGoal ? ' selvmål' : ''); }
 
 function buildScorerFields_(goals, expectedGoals, fx) {
-  if (!goals || goals.length !== expectedGoals || goals.some(function(g) { return !g.team || !g.player || !g.minute; })) {
-    return { homeScorers: '', awayScorers: '', scorers: '', goals: '' };
+  const validGoals = (goals || []).filter(function(g) {
+    return g.team && g.player && g.minute;
+  });
+
+  const uniqueGoals = [];
+  const seen = {};
+  validGoals.forEach(function(g) {
+    const key = [teamAlias_(g.team), g.player, g.minute, g.ownGoal ? 'og' : ''].join('|').toLowerCase();
+    if (seen[key]) return;
+    seen[key] = true;
+    uniqueGoals.push(g);
+  });
+
+  const isComplete = uniqueGoals.length === Number(expectedGoals);
+  const partialNote = isComplete ? '' : '[partial:' + uniqueGoals.length + '/' + expectedGoals + ']';
+
+  if (!uniqueGoals.length) {
+    return {
+      homeScorers: '',
+      awayScorers: '',
+      scorers: '',
+      goals: '',
+      partialNote: partialNote,
+      audit: partialNote || 'no verified scorer data'
+    };
   }
-  const home = goals.filter(function(g) { return teamAlias_(g.team) === teamAlias_(fx.homeTeam); }).map(scorerText_);
-  const away = goals.filter(function(g) { return teamAlias_(g.team) === teamAlias_(fx.awayTeam); }).map(scorerText_);
+
+  const home = uniqueGoals.filter(function(g) {
+    return teamAlias_(g.team) === teamAlias_(fx.homeTeam);
+  }).map(scorerText_);
+
+  const away = uniqueGoals.filter(function(g) {
+    return teamAlias_(g.team) === teamAlias_(fx.awayTeam);
+  }).map(scorerText_);
+
+  const goalText = uniqueGoals.map(function(g) {
+    return [g.team, g.player, g.minute, g.ownGoal ? 'selvmål' : ''].join('|').replace(/\|$/, '');
+  }).join('; ');
+
   return {
     homeScorers: home.join('; '),
     awayScorers: away.join('; '),
-    scorers: goals.map(scorerText_).join('; '),
-    goals: goals.map(function(g) { return [g.team, g.player, g.minute, g.ownGoal ? 'selvmål' : ''].join('|').replace(/\|$/,''); }).join('; ')
+    scorers: uniqueGoals.map(scorerText_).join('; '),
+    goals: goalText,
+    partialNote: partialNote,
+    audit: (partialNote ? partialNote + '; ' : '') + goalText
   };
 }
 
