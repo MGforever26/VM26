@@ -1,6 +1,14 @@
 (function(){
   function norm(s){
-    return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+    return String(s||'')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/æ/g,'ae')
+      .replace(/ø/g,'o')
+      .replace(/å/g,'a')
+      .replace(/[^a-z0-9]+/g,' ')
+      .trim();
   }
   function teamAlias(s){
     var n=norm(s);
@@ -23,7 +31,7 @@
       'uruguay':'uruguay','cape verde':'kap verde','kap verde':'kap verde',
       'belgium':'belgien','belgien':'belgien','iran':'iran','new zealand':'new zealand','egypt':'egypten','egypten':'egypten',
       'france':'frankrig','frankrig':'frankrig','iraq':'irak','irak':'irak','norway':'norge','norge':'norge','senegal':'senegal',
-      'argentina':'argentina','austria':'ostrig','austria':'ostrig','ostrig':'ostrig','jordan':'jordan','algeria':'algeriet','algeriet':'algeriet',
+      'argentina':'argentina','austria':'ostrig','ostrig':'ostrig','jordan':'jordan','algeria':'algeriet','algeriet':'algeriet',
       'portugal':'portugal','uzbekistan':'usbekistan','usbekistan':'usbekistan','colombia':'colombia','dr congo':'dr congo','democratic republic of congo':'dr congo',
       'england':'england','ghana':'ghana','panama':'panama','croatia':'kroatien','kroatien':'kroatien',
       'czechia':'tjekkiet','czech republic':'tjekkiet','tjekkiet':'tjekkiet',
