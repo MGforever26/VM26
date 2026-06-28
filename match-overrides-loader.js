@@ -28,7 +28,7 @@
     var byMatch={};
     window.DATA.matches.forEach(function(m){ byMatch[String(m.matchNumber)] = m; });
     var fields=[
-      'status','stage','group','homeTeam','awayTeam','homeScore','awayScore',
+      'status','stage','group','homeTeam','awayTeam','homeScore','awayScore','winnerTeam','winnerNote',
       'danishDate','danishTime','danishDateTime','localDate','localTime','localDateTime',
       'stadium','city','country','channel','channelStatus','lastUpdated','source',
       'homeScorers','awayScorers','scorers','goals'
@@ -58,6 +58,30 @@
     }
     return changed;
   }
+  function winnerOf(m){
+    if(!m) return '';
+    if(m.winnerTeam) return m.winnerTeam;
+    if(m.status!=='finished' || m.homeScore==null || m.awayScore==null) return '';
+    if(Number(m.homeScore)>Number(m.awayScore)) return m.homeTeam;
+    if(Number(m.awayScore)>Number(m.homeScore)) return m.awayTeam;
+    return '';
+  }
+  function propagateWinners(){
+    if(!window.DATA || !Array.isArray(window.DATA.matches)) return 0;
+    var byMatch={};
+    window.DATA.matches.forEach(function(m){ byMatch[String(m.matchNumber)] = m; });
+    var changed=0;
+    window.DATA.matches.forEach(function(m){
+      ['homeTeam','awayTeam'].forEach(function(side){
+        var txt=String(m[side]||'');
+        var hit=txt.match(/^Match\s+(\d+)\s+vinder$/i) || txt.match(/^Vinder\s+af\s+match\s+(\d+)$/i) || txt.match(/^Winner\s+of\s+(\d+)$/i);
+        if(!hit) return;
+        var w=winnerOf(byMatch[String(hit[1])]);
+        if(w && m[side]!==w){ m[side]=w; changed++; }
+      });
+    });
+    return changed;
+  }
   async function run(){
     var ready=await waitForApp();
     if(!ready) return;
@@ -69,6 +93,7 @@
         changed += merge(payload);
       }
     }catch(e){ console.warn('Match overrides kunne ikke hentes', e); }
+    changed += propagateWinners();
     if(changed){
       window.renderMatches();
       window.renderStandings && window.renderStandings();
