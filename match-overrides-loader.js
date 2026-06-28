@@ -22,22 +22,40 @@
     });
     return changed;
   }
+  function sameValue(a,b){ return JSON.stringify(a)===JSON.stringify(b); }
   function merge(payload){
     if(!payload || !Array.isArray(payload.matches) || !window.DATA) return 0;
     var byMatch={};
     window.DATA.matches.forEach(function(m){ byMatch[String(m.matchNumber)] = m; });
+    var fields=[
+      'status','stage','group','homeTeam','awayTeam','homeScore','awayScore',
+      'danishDate','danishTime','danishDateTime','localDate','localTime','localDateTime',
+      'stadium','city','country','channel','channelStatus','lastUpdated','source',
+      'homeScorers','awayScorers','scorers','goals'
+    ];
     var changed=0;
     payload.matches.forEach(function(row){
-      var m=byMatch[String(row.matchNumber)];
-      if(!m) return;
-      if(row.homeTeam && row.homeTeam !== m.homeTeam) return;
-      if(row.awayTeam && row.awayTeam !== m.awayTeam) return;
-      if(row.status && row.status !== m.status){ m.status=row.status; changed++; }
-      if(row.homeScore !== undefined && row.homeScore !== m.homeScore){ m.homeScore=row.homeScore; changed++; }
-      if(row.awayScore !== undefined && row.awayScore !== m.awayScore){ m.awayScore=row.awayScore; changed++; }
-      ['danishDate','danishTime','danishDateTime','localDate','localTime','localDateTime'].forEach(function(k){ if(row[k] && row[k]!==m[k]){m[k]=row[k]; changed++;} });
-      if(Array.isArray(row.goals) && row.goals.length){ m.goals=row.goals; changed += row.goals.length; }
+      var id=String(row.matchNumber||'');
+      if(!id) return;
+      var m=byMatch[id];
+      if(!m){
+        var copy=Object.assign({}, row);
+        window.DATA.matches.push(copy);
+        byMatch[id]=copy;
+        changed++;
+        return;
+      }
+      fields.forEach(function(k){
+        if(row[k]!==undefined && !sameValue(row[k],m[k])){
+          m[k]=row[k];
+          changed++;
+        }
+      });
     });
+    if(payload.generatedAt && window.DATA.meta && window.DATA.meta.generatedAt!==payload.generatedAt){
+      window.DATA.meta.generatedAt=payload.generatedAt;
+      changed++;
+    }
     return changed;
   }
   async function run(){
@@ -54,6 +72,7 @@
     if(changed){
       window.renderMatches();
       window.renderStandings && window.renderStandings();
+      window.renderKnockout && window.renderKnockout();
       window.renderScorers();
     }
   }
