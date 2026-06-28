@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-19T23:55:00+02:00",
-  "source": "Trusted match overrides",
+  "generatedAt": "2026-06-28T17:48:00+02:00",
+  "source": "Group results from live tournament feed; Round of 32 fixtures cross-checked with Reuters and SB Nation on 2026-06-28",
   "matches": [
     {
       "matchNumber": 32,
@@ -13,6 +13,51 @@
         { "team": "USA", "player": "Cameron Burgess", "minute": "11'", "ownGoal": true, "note": "selvmål" },
         { "team": "USA", "player": "Alex Freeman", "minute": "43'" }
       ]
-    }
+    },
+    { "matchNumber": 45, "status": "finished", "homeScore": 5, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 46, "status": "finished", "homeScore": 0, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 47, "status": "finished", "homeScore": 0, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 48, "status": "finished", "homeScore": 1, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 49, "status": "finished", "homeScore": 0, "awayScore": 3, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 50, "status": "finished", "homeScore": 4, "awayScore": 2, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 51, "status": "finished", "homeScore": 2, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 52, "status": "finished", "homeScore": 3, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 53, "status": "finished", "homeScore": 0, "awayScore": 3, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 54, "status": "finished", "homeScore": 1, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 55, "status": "finished", "homeScore": 0, "awayScore": 2, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 56, "status": "finished", "homeScore": 2, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 57, "status": "finished", "homeScore": 1, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 58, "status": "finished", "homeScore": 1, "awayScore": 3, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 59, "status": "finished", "homeScore": 3, "awayScore": 2, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 60, "status": "finished", "homeScore": 0, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 61, "status": "finished", "homeScore": 1, "awayScore": 4, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 62, "status": "finished", "homeScore": 5, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 63, "status": "finished", "homeScore": 1, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 64, "status": "finished", "homeScore": 1, "awayScore": 5, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 65, "status": "finished", "homeScore": 0, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 66, "status": "finished", "homeScore": 0, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 67, "status": "finished", "homeScore": 0, "awayScore": 2, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 68, "status": "finished", "homeScore": 2, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 69, "status": "finished", "homeScore": 3, "awayScore": 3, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed; Reuters confirmed Austria and Algeria advanced after 3-3 draw" },
+    { "matchNumber": 70, "status": "finished", "homeScore": 1, "awayScore": 3, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 71, "status": "finished", "homeScore": 0, "awayScore": 0, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+    { "matchNumber": 72, "status": "finished", "homeScore": 3, "awayScore": 1, "lastUpdated": "2026-06-28T17:48:00+02:00", "source": "Live tournament feed" },
+
+    { "matchNumber": 73, "homeTeam": "Sydafrika", "awayTeam": "Canada", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 74, "homeTeam": "Tyskland", "awayTeam": "Paraguay", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 75, "homeTeam": "Holland", "awayTeam": "Marokko", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 76, "homeTeam": "Brasilien", "awayTeam": "Japan", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 77, "homeTeam": "Frankrig", "awayTeam": "Sverige", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 78, "homeTeam": "Elfenbenskysten", "awayTeam": "Norge", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 79, "homeTeam": "Mexico", "awayTeam": "Ecuador", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 80, "homeTeam": "England", "awayTeam": "DR Congo", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 81, "homeTeam": "USA", "awayTeam": "Bosnien-Hercegovina", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 82, "homeTeam": "Belgien", "awayTeam": "Senegal", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 83, "homeTeam": "Portugal", "awayTeam": "Kroatien", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 84, "homeTeam": "Spanien", "awayTeam": "Østrig", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 85, "homeTeam": "Schweiz", "awayTeam": "Algeriet", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 86, "homeTeam": "Argentina", "awayTeam": "Kap Verde", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 87, "homeTeam": "Colombia", "awayTeam": "Ghana", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" },
+    { "matchNumber": 88, "homeTeam": "Australien", "awayTeam": "Egypten", "source": "Reuters/SB Nation Round of 32 fixtures, 2026-06-28" }
   ]
 }
